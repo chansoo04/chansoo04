@@ -21,7 +21,7 @@ def index():
 
 @app.route('/test', methods = ['GET', 'POST'])
 def testtest():
-    print('들어온다')
+    print('test 들어왔습니다!')
     return 'hello brotehr'
 
 @app.route('/product', methods = ['GET'])
@@ -32,7 +32,7 @@ def getproductinfo():
         'merchant_uid': 'test_test'+ str(r_number),
         'price': price
     })
-    print(r_number)
+    print('상품 금액과 번호', r_number, price)
     return {
         'merchant_uid': 'test_test'+str(r_number),
         'product_name': '노르웨이 회전의자', 
@@ -44,15 +44,23 @@ def getproductinfo():
 @app.route('/webhook/test', methods = ['GET', 'POST'])
 def webhook():
     print('hello')
-    print(request.remote_addr)
+    # print(request.remote_addr)
     return {'hi': 'brother'}
+
+
+@app.route('/payment/check', methods = ['POST'])
+def checkpayment():
+    print('request json', request.json())
+    print('request body', request.get_json())
+    print('paymentcheck 들어왔다!!')
+    return 'hi'
 
 
 @app.route('/payment/success', methods = ['POST'])
 def paymentsuccess():
     print('성공 들어왔다')
-    print(request.form)
-    print(request.form.to_dict())
+    # print(request.form)
+    # print(request.form.to_dict())
     
     
     
@@ -66,11 +74,11 @@ def paymentsuccess():
         data = json.dumps(body),
         headers = {'Content-Type': 'application/json'}
     )
-    print(get_token.encoding)
-    print(get_token.status_code)
-    print(get_token.json())
-    print(get_token.json()['response'])
-    print(get_token.json()['response']['access_token'])
+    # print(get_token.encoding)
+    # print(get_token.status_code)
+    # print(get_token.json())
+    # print(get_token.json()['response'])
+    # print(get_token.json()['response']['access_token'])
 
     # url = 
 
@@ -79,6 +87,12 @@ def paymentsuccess():
         headers={'Authorization': f"Bearer {get_token.json()['response']['access_token']}",
         'Content-Type': 'application/json'}
     )
+
+    print(pay_auth.encoding)
+    print(pay_auth.json())
+    print(pay_auth.status_code)
+
+
 
 
     find_price = db.product.find_one({'merchant_uid': request.form['merchant_uid']})
